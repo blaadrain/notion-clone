@@ -4,10 +4,25 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { api } from '@/convex/_generated/api';
 import { Id } from '@/convex/_generated/dataModel';
 import { cn } from '@/lib/utils';
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from '@/components/ui/dropdown-menu';
 import { useMutation } from 'convex/react';
-import { ChevronDown, ChevronRight, LucideIcon, Plus } from 'lucide-react';
+import {
+  ChevronDown,
+  ChevronRight,
+  LucideIcon,
+  MoreHorizontal,
+  Plus,
+  Trash,
+} from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
+import { DropdownMenuSeparator } from '@radix-ui/react-dropdown-menu';
+import { useUser } from '@clerk/clerk-react';
 
 type SidebarItemProps = {
   id?: Id<'documents'>;
@@ -17,7 +32,7 @@ type SidebarItemProps = {
   isSearch?: boolean;
   level?: number;
   label: string;
-  onClick: () => void;
+  onClick?: () => void;
   onExpand?: () => void;
   icon: LucideIcon;
 };
@@ -34,8 +49,10 @@ export const SidebarItem = ({
   onClick,
   icon: Icon,
 }: SidebarItemProps) => {
+  const { user } = useUser();
   const router = useRouter();
   const create = useMutation(api.documents.create);
+  const archive = useMutation(api.documents.archive);
   const ChevronIcon = expanded ? ChevronDown : ChevronRight;
 
   const handleExpand = (
@@ -64,6 +81,20 @@ export const SidebarItem = ({
       loading: 'Creating a new note...',
       success: 'New note created!',
       error: 'Failed to create a new note.',
+    });
+  };
+
+  const onArchive = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    event.stopPropagation();
+
+    if (!id) return;
+
+    const promise = archive({ id });
+
+    toast.promise(promise, {
+      loading: 'Moving to trash...',
+      success: 'Note moved to trash.',
+      error: 'Failed to archive note.',
     });
   };
 
@@ -100,6 +131,37 @@ export const SidebarItem = ({
 
       {!!id && (
         <div className="ml-auto flex items-center gap-x-2">
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              asChild
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div
+                role="button"
+                className="opacity-0 group-hover:opacity-100 h-full ml-auto rounded-sm hover:bg-neutral-300 dark:hover:bg-neutral-600"
+              >
+                <MoreHorizontal className="h-6 w-6 p-1 text-muted-foreground" />
+              </div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              className="w-60 p-2"
+              align="start"
+              side="right"
+              forceMount
+            >
+              <DropdownMenuItem
+                className="cursor-pointer"
+                onClick={onArchive}
+              >
+                <Trash className="h-6 w-6 p-1 mr-2" />
+                Delete
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <div className="text-xs text-muted-foreground p-2">
+                Last edited by: {user?.fullName}
+              </div>
+            </DropdownMenuContent>
+          </DropdownMenu>
           <div
             role="button"
             onClick={onCreate}
