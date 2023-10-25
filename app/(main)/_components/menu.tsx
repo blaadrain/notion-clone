@@ -21,13 +21,16 @@ type MenuProps = {
 
 export const Menu = ({ documentId }: MenuProps) => {
   const { user } = useUser();
+  const router = useRouter();
   const archive = useMutation(api.documents.archive);
   const document = useQuery(api.documents.getById, {
     documentId,
   });
 
   const onArchive = () => {
-    const promise = archive({ id: documentId });
+    const promise = archive({ id: documentId }).then((documentId) =>
+      router.push('/documents')
+    );
 
     toast.promise(promise, {
       loading: 'Moving to trash...',
@@ -44,6 +47,7 @@ export const Menu = ({ documentId }: MenuProps) => {
         <Button
           size="sm"
           variant="ghost"
+          className="p-0"
         >
           <MoreHorizontal className="h-4 w-4" />
         </Button>
