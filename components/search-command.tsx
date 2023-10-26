@@ -15,6 +15,8 @@ import {
   CommandItem,
 } from './ui/command';
 import { File } from 'lucide-react';
+import Link from 'next/link';
+import { Doc } from '@/convex/_generated/dataModel';
 
 export const SearchCommand = () => {
   const { user } = useUser();
@@ -60,20 +62,21 @@ export const SearchCommand = () => {
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
         <CommandGroup heading="Documents">
-          {documents?.map((document) => (
-            <CommandItem
+          {documents?.map((document: Doc<'documents'>) => (
+            <Link
               key={document._id}
-              value={document._id}
-              title={document.title}
-              onSelect={onSelect}
+              href={`/documents/${document._id}`}
+              onClick={onClose}
             >
-              {document.icon ? (
-                <p className="mr-2 text-[18px]">{document.icon}</p>
-              ) : (
-                <File className="mr-2 h-4 w-4" />
-              )}
-              <span>{document.title}</span>
-            </CommandItem>
+              <CommandItem value={document.title}>
+                {document.icon ? (
+                  <p className="mr-2 text-[18px]">{document.icon}</p>
+                ) : (
+                  <File className="mr-2 h-4 w-4" />
+                )}
+                <span>{document.title}</span>
+              </CommandItem>
+            </Link>
           ))}
         </CommandGroup>
       </CommandList>

@@ -43,7 +43,6 @@ export const Navigation = () => {
   const navbarRef = useRef<ElementRef<'div'>>(null);
   const [isResetting, setIsResetting] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(isMobile);
-  const [windowWidth, setWindowWidth] = useState(240);
 
   useEffect(() => {
     if (isMobile) {
@@ -78,12 +77,10 @@ export const Navigation = () => {
     if (newWidth < 240) newWidth = 240;
     if (newWidth > 480) newWidth = 480;
 
-    setWindowWidth(newWidth);
-
     if (sidebarRef.current && navbarRef.current) {
       sidebarRef.current.style.width = `${newWidth}px`;
+      navbarRef.current.style.width = `calc(100%-${newWidth}px)`;
       navbarRef.current.style.setProperty('left', `${newWidth}px`);
-      navbarRef.current.style.setProperty('width', `calc(100%-${newWidth}px)`);
     }
   };
 
@@ -99,10 +96,7 @@ export const Navigation = () => {
       setIsResetting(true);
 
       sidebarRef.current.style.width = isMobile ? '100%' : '240px';
-      navbarRef.current.style.setProperty(
-        'width',
-        isMobile ? '0' : 'calc(100%-240px)'
-      );
+      navbarRef.current.style.width = isMobile ? '100%' : 'calc(100%-240px)';
       navbarRef.current.style.setProperty('left', isMobile ? '100%' : '240px');
     }
 
@@ -115,7 +109,7 @@ export const Navigation = () => {
       setIsResetting(true);
 
       sidebarRef.current.style.width = '0';
-      navbarRef.current.style.setProperty('width', 'w-[calc(100%-240px)]');
+      navbarRef.current.style.setProperty('width', 'calc(100%-240px)');
       navbarRef.current.style.setProperty('left', '0');
 
       setTimeout(() => setIsResetting(false), 300);
@@ -207,7 +201,7 @@ export const Navigation = () => {
       <div
         ref={navbarRef}
         className={cn(
-          `absolute top-0 z-[99999] left-60 w-[calc(100%-${windowWidth}px)]`,
+          `w-full absolute top-0 z-[99999] left-60`,
           isResetting && 'transition-all ease-in-out duration-300',
           (isMobile || isCollapsed) && 'left-0 w-full'
         )}

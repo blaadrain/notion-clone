@@ -52,7 +52,7 @@ const DocumentPage = ({ params }: DocumentPageProps) => {
   }
 
   return (
-    <div className="pb-40">
+    <div className="pb-20">
       <Cover
         preview
         url={document.coverImage}

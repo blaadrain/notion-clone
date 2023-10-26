@@ -13,7 +13,7 @@ const MarketingLayout = ({ children }: { children: React.ReactNode }) => {
   }
 
   return (
-    <div className="min-h-[100vh] flex flex-col">
+    <div className="min-h-[100vh] flex flex-col dark:bg-[#1F1F1F]">
       <Navbar />
       <main className="h-full pt-40 flex-auto">{children}</main>
       <Footer />

@@ -81,7 +81,7 @@ export const Publish = ({ initialData }: PublishProps) => {
       </PopoverTrigger>
       <PopoverContent
         className="w-72"
-        align="end"
+        align="center"
         alignOffset={8}
         forceMount
       >
