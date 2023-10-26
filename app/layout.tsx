@@ -9,9 +9,19 @@ import { EdgeStoreProvider } from '../lib/edgestore';
 
 const inter = Inter({ subsets: ['latin'] });
 
+// name="viewport"
+// content="width=device-width, user-scalable=0, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+// >
+
 export const metadata: Metadata = {
   title: 'Jotion',
   description: 'Notion clone with Next.JS',
+  viewport: {
+    userScalable: false,
+    initialScale: 1,
+    maximumScale: 1,
+    minimumScale: 1,
+  },
   icons: {
     icon: [
       {

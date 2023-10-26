@@ -2,6 +2,7 @@
 
 import { ConfirmModal } from '@/components/modals/confirm-modal';
 import { Spinner } from '@/components/spinner';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { api } from '@/convex/_generated/api';
 import { Id } from '@/convex/_generated/dataModel';
@@ -57,6 +58,18 @@ export const TrashBox = () => {
     }
   };
 
+  const onRemoveAll = () => {
+    if (documents) {
+      for (const document of documents) {
+        remove({ id: document._id });
+
+        if (params.documentId === document._id) {
+          router.push('/documents');
+        }
+      }
+    }
+  };
+
   if (documents === undefined) {
     return (
       <div className="h-full flex items-center justify-center p-4">
@@ -68,18 +81,29 @@ export const TrashBox = () => {
   return (
     <div className="text-sm p-2">
       <div className="flex items-center gap-x-1">
-        <Search className="h-6 w-6 p-1" />
+        <Search className="h-8 w-8 p-1" />
         <Input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="h-7 focus-visible:ring-transparent bg-secondary"
+          className="h-9 focus-visible:ring-transparent bg-secondary rounded-sm"
           placeholder="Filter by page title..."
         />
       </div>
-      <div className="mt-2">
-        <p className="hidden last:block text-xs text-center text-muted-foreground py-2">
+      {documents?.length ? (
+        <ConfirmModal onConfirm={() => onRemoveAll()}>
+          <div
+            role="button"
+            className="mt-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground text-center p-3 rounded-sm transition"
+          >
+            Delete all
+          </div>
+        </ConfirmModal>
+      ) : (
+        <p className="text-xs text-center text-muted-foreground mt-4">
           No documents found
         </p>
+      )}
+      <div className="mt-2">
         {filteredDocuments?.map((document) => (
           <div
             key={document._id}

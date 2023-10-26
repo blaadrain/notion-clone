@@ -10,7 +10,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from '@/components/ui/dropdown-menu';
-import { useMutation } from 'convex/react';
+import { useMutation, useQuery } from 'convex/react';
 import {
   ChevronDown,
   ChevronRight,
@@ -19,7 +19,7 @@ import {
   Plus,
   Trash,
 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { DropdownMenuSeparator } from '@radix-ui/react-dropdown-menu';
 import { useUser } from '@clerk/clerk-react';
@@ -49,6 +49,7 @@ export const SidebarItem = ({
   onClick,
   icon: Icon,
 }: SidebarItemProps) => {
+  const params = useParams();
   const { user } = useUser();
   const router = useRouter();
   const create = useMutation(api.documents.create);
@@ -89,9 +90,7 @@ export const SidebarItem = ({
 
     if (!id) return;
 
-    const promise = archive({ id }).then((documentId) =>
-      router.push('/documents')
-    );
+    const promise = archive({ id });
 
     toast.promise(promise, {
       loading: 'Moving to trash...',

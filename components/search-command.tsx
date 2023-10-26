@@ -60,8 +60,7 @@ export const SearchCommand = () => {
     >
       <CommandInput placeholder={`Search ${user?.fullName}'s Jotion...`} />
       <CommandList>
-        <CommandEmpty>No results found.</CommandEmpty>
-        <CommandGroup heading="Documents">
+        <CommandGroup heading="Your documents">
           {documents?.map((document: Doc<'documents'>) => (
             <Link
               key={document._id}
@@ -79,6 +78,7 @@ export const SearchCommand = () => {
             </Link>
           ))}
         </CommandGroup>
+        <CommandEmpty>No results found.</CommandEmpty>
       </CommandList>
     </CommandDialog>
   );
