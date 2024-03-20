@@ -21,7 +21,7 @@ Key Features:
 
 ### Prerequisites
 
-**Node version 18.x.x
+**Node version 18.x.x**
 
 ### Cloning the repository
 
